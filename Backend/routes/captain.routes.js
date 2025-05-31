@@ -1,7 +1,7 @@
+const captainController = require("../controllers/captain.controller");
 const express = require("express");
 const router = express.Router();
 const { body } = require("express-validator");
-const captainController = require("../controllers/captain.controller");
 const authMiddleware = require("../middlewares/auth.middleware");
 
 router.post(
@@ -21,10 +21,10 @@ router.post(
       .isLength({ min: 3 })
       .withMessage("Plate must be at least 3 characters long"),
     body("vehicle.capacity")
-      .isNumeric()
-      .withMessage("Capacity must be a number"),
+      .isInt({ min: 1 })
+      .withMessage("Capacity must be at least 1"),
     body("vehicle.vehicleType")
-      .isIn(["car", "motorcycle", "auto"])
+      .isIn(["car", "moto", "auto"])
       .withMessage("Invalid vehicle type"),
   ],
   captainController.registerCaptain
@@ -46,7 +46,8 @@ router.get(
   authMiddleware.authCaptain,
   captainController.getCaptainProfile
 );
-router.post(
+
+router.get(
   "/logout",
   authMiddleware.authCaptain,
   captainController.logoutCaptain

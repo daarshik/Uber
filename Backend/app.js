@@ -7,6 +7,8 @@ const cookieParser = require("cookie-parser");
 const connectToDb = require("./db/db");
 const userRoutes = require("./routes/user.routes");
 const captainRoutes = require("./routes/captain.routes");
+const mapsRoutes = require("./routes/maps.routes");
+const rideRoutes = require("./routes/ride.routes");
 
 connectToDb();
 
@@ -16,11 +18,13 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 app.get("/", (req, res) => {
-  res.send("Hello world!");
+  res.send("Hello World");
 });
 
 app.use("/users", userRoutes);
 app.use("/captains", captainRoutes);
+app.use("/maps", mapsRoutes);
+app.use("/rides", rideRoutes);
 
 module.exports = app;
 
@@ -57,9 +61,6 @@ module.exports = app;
 // Problem Without CORS:
 // If your frontend (React at port 3000) tries to make an API call to your backend (5000), you get an error like:
 
-// csharp
-// Copy
-// Edit
 // Access to fetch at 'http://localhost:5000/api' from origin 'http://localhost:3000' has been blocked by CORS policy...
 
 // What’s Actually Happening Behind the Scenes?
@@ -67,9 +68,6 @@ module.exports = app;
 
 // If your backend responds with appropriate CORS headers, like:
 
-// http
-// Copy
-// Edit
 // Access-Control-Allow-Origin: http://localhost:3000
 // Access-Control-Allow-Methods: GET, POST, PUT, DELETE
 // ...then the actual request is allowed.
@@ -86,9 +84,6 @@ module.exports = app;
 
 // That website has JavaScript trying to do this:
 
-// js
-// Copy
-// Edit
 // fetch("https://mybank.com/transfer?to=hacker&amount=10000");
 // If cross-origin requests were allowed by default, that malicious site could:
 
@@ -108,14 +103,9 @@ module.exports = app;
 // When you log in to a site (like your bank), the server gives your browser a session cookie, something like:
 
 // http
-// Copy
-// Edit
 // Set-Cookie: session_id=abc123; HttpOnly; Secure
 // Your browser saves it and automatically includes it in every request to that domain:
 
-// http
-// Copy
-// Edit
 // GET /dashboard HTTP/1.1
 // Host: mybank.com
 // Cookie: session_id=abc123
@@ -125,8 +115,6 @@ module.exports = app;
 // You're logged in to your bank (https://mybank.com), and you visit a shady website (https://evil.com). That site has malicious JavaScript like this:
 
 // js
-// Copy
-// Edit
 // fetch("https://mybank.com/transfer?to=hacker&amount=10000");
 // Here's the dangerous part:
 // The browser automatically attaches your cookies to that request — including session_id=abc123.
